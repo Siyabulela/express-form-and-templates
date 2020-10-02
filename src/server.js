@@ -16,7 +16,9 @@ app.get("/", (req, res) => {
 });
 
 function addNewVisitor() {
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
+   
+
     if (err) throw err;
     var dbo = db.db("umuzidb");
     app.post("/new_visit", (req, res) => {
