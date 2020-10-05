@@ -10,23 +10,26 @@ const visitorData = {
   comments: `Jerusalema`,
 };
 
-MongoClient.connect(url, function (err, db) {
+MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
   const dbo = db.db("umuzidb");
   if (err) throw err;
   dbo
     .collection("visitor")
     .insertOne(visitorData)
     .then((result) => {});
-  db.close();
 });
 
 describe(`This checks if mongoDB works`, () => {
   it(`should save data into the database and retrive that data`, () => {
-    MongoClient.connect(url, function (err, db) {
+    MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
       const dbo = db.db("umuzidb");
       if (err) throw err;
       dbo
-        .collection("visitor").find().limit(1).sort({ $natural: -1 }).toArray(function (err, result) {
+        .collection("visitor")
+        .find()
+        .limit(1)
+        .sort({ $natural: -1 })
+        .toArray(function (err, result) {
           expect(visitorData.name).toBe(result[0].name);
           expect(visitorData.assistant).toBe(result[0].assistant);
           expect(visitorData.age).toBe(result[0].age);
@@ -34,7 +37,6 @@ describe(`This checks if mongoDB works`, () => {
           expect(visitorData.time).toBe(result[0].time);
           expect(visitorData.comments).toBe(result[0].comments);
         });
-      db.close();
     });
   });
 });

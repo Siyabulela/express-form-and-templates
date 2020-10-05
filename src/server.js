@@ -1,24 +1,24 @@
 const express = require("express");
+const path = require("path");
 const bodyParser = require("body-parser");
 const app = express();
 const MongoClient = require("mongodb").MongoClient;
 const url = "mongodb://localhost:27017/umuzidb";
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "pug");
 
 app.listen(3000, function () {
-  console.log("listening on 3000");
+  return console.log("listening on 3000");
 });
 
-app.get("/", (req, res) => {
+app.get("/new_visit", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
 function addNewVisitor() {
   MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
-   
-
     if (err) throw err;
     var dbo = db.db("umuzidb");
     app.post("/new_visit", (req, res) => {
@@ -38,7 +38,6 @@ function addNewVisitor() {
                 time: `Time of Visit   : ${result[0].time}`,
                 comments: `Comments    : ${result[0].comments}`,
               });
-              db.close();
             });
             return `visitor is added to the database`
         })
