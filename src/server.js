@@ -39,7 +39,6 @@ function addNewVisitor() {
                 comments: `Comments    : ${result[0].comments}`,
               });
             });
-            return `visitor is added to the database`
         })
         .catch((error) => console.error(error));
     });
